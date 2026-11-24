@@ -29,7 +29,12 @@ pipeline {
             }
         }
 
-        // Pendiente: stage('Build') -> docker compose build
+        stage('Build') {
+            steps {
+                echo 'Construyendo las imágenes Docker de TaskFlow...'
+                sh 'docker compose build'
+            }
+        }
         // Pendiente: stage('Deploy') -> despliegue de servicios
     }
 }
