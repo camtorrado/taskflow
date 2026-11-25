@@ -3,6 +3,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Checkout') {
             steps {
                 echo 'Obteniendo codigo del repositorio...'
@@ -31,10 +32,28 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Construyendo las imágenes Docker de TaskFlow...'
+                echo 'Generando archivo de configuracion...'
+
+                sh '''
+                    cp .env.example .env
+                '''
+
+                echo 'Construyendo imagenes de TaskFlow...'
+
                 sh 'docker compose build'
             }
         }
-        // Pendiente: stage('Deploy') -> despliegue de servicios
+
+        stage('Deploy') {
+            steps {
+                echo 'Desplegando servicios de TaskFlow...'
+
+                sh 'docker compose up -d'
+
+                echo 'Verificando servicios desplegados...'
+
+                sh 'docker compose ps'
+            }
+        }
     }
 }
